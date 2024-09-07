@@ -1,0 +1,1 @@
+# protc-gen-go
