@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"go/ast"
 	"go/format"
 	"go/parser"
@@ -25,9 +26,9 @@ import (
 // If a failure occurs while reading or writing, Run prints an error to
 // [os.Stderr] and calls [os.Exit](1).
 func run(reader io.Reader, opts *protogen.Options) error {
-	// if len(os.Args) > 1 {
-	// 	return fmt.Errorf("unknown argument %q (this program should be run by protoc, not directly)", os.Args[1])
-	// }
+	if len(os.Args) > 1 {
+		return fmt.Errorf("unknown argument %q (this program should be run by protoc, not directly)", os.Args[1])
+	}
 
 	in, err := io.ReadAll(reader)
 	if err != nil {
