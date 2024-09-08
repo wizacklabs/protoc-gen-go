@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package testdata;
+option go_package = "./testdata";
+
+message foo {
+    // @gorm.tag=column:id;autoIncrement
+    // @json.tag=ID
+    // @go.name=ID
+    int64 id = 1;
+}

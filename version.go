@@ -11,7 +11,7 @@ import (
 
 var (
 	version = "v0.1.0-0-g00000000"
-	rc      = 0
+	rc      = "0"
 )
 
 func showVersion() {
@@ -23,8 +23,9 @@ func showVersion() {
 	}
 
 	v := "v" + matches[1]
-	if rc > 0 {
-		v += "-rc." + strconv.Itoa(rc)
+
+	if n, err := strconv.Atoi(rc); err == nil && n > 0 {
+		v += "-rc." + rc
 	}
 
 	fmt.Fprintf(os.Stdout, "%v %v\n", filepath.Base(os.Args[0]), v)

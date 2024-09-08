@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package testdata;
+option go_package = "./testdata";
+
+message dog {
+  string name = 1;
+  int32 age = 2;
+}
+
+message cat {
+  string name = 1;
+  string kind = 2;
+  int32 birth = 3;
+}
+
+message message {
+  // @gorm.tag=column:id;autoIncrement
+  // @bson.tag=_id
+  int64 id = 1;
+  /* @gorm.tag=column:sequence;type:bigint */
+  int64 sequence = 2;
+
+  /* 
+  * @gorm.tag=column:addresser;type:bigint 
+  */
+
+  // @bson.tag=Addresser
+  int64 addresser = 3;
+  int64 addressee = 4; //  @gorm.tag=column:addressee;type:bigint 
+  int64 originator = 5;
+  int64 timestamp = 6;
+  int32 flags = 7;
+  int32 platform = 8;
+  int32 category = 9;
+  int32 type = 10;
+  string s1 = 11;
+  string s2 = 12;
+  string s3 = 13;
+  string s4 = 14;
+  int64 n1 = 15;
+  int64 n2 = 16;
+  int64 n3 = 17;
+  int64 n4 = 18;
+  bytes quote = 19;
+  bytes extra = 20;
+  message man {
+    // @json.tag=user_name
+    // @go.name=UName
+    string name = 1;
+    int32 age = 2; // @go.name=UA
+  }
+  man from = 21;
+
+  // @go.name=MyPet
+  // @bson.tag=my_pet
+  oneof pet {
+    dog dog = 22;
+    cat cat = 23;
+  }
+}

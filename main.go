@@ -1,13 +1,12 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
-	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
@@ -19,6 +18,7 @@ func main() {
 		showVersion()
 		os.Exit(0)
 	}
+
 	if len(os.Args) == 2 && os.Args[1] == "--help" {
 		fmt.Fprintf(os.Stdout, "See "+genGoDocURL+" for usage information.\n")
 		os.Exit(0)
@@ -26,10 +26,19 @@ func main() {
 
 	var (
 		flags        flag.FlagSet
-		plugins      = flags.String("plugins", "", "deprecated option")
+		_            = flags.String("plugins", "", "deprecated option")
 		importPrefix = flags.String("import_prefix", "", "prefix to prepend to import paths")
 		//experimentalStripNonFunctionalCodegen = flags.Bool("experimental_strip_nonfunctional_codegen", false, "experimental_strip_nonfunctional_codegen true means that the plugin will not emit certain parts of the generated code in order to make it possible to compare a proto2/proto3 file with its equivalent (according to proto spec) editions file. Primarily, this is the encoded descriptor.")
 	)
+
+	for i := 1; i < len(os.Args); i++ {
+		if os.Args[i] == "-plugins" || os.Args[i] == "--plugins" {
+			if i < len(os.Args)-1 && strings.Contains(strings.ToLower(os.Args[i+1]), "grpc") {
+				fmt.Fprintf(os.Stderr, "protoc-gen-go: plugins are not supported; use 'protoc --go-grpc_out=...' to generate gRPC\n\nSee %s for more information.\n", grpcDocURL)
+				os.Exit(1)
+			}
+		}
+	}
 
 	opts := &protogen.Options{
 		ParamFunc: flags.Set,
@@ -45,22 +54,7 @@ func main() {
 		},
 	}
 
-	err := run(opts, func(gen *protogen.Plugin) error {
-		if *plugins != "" {
-			reason := fmt.Sprintf("protoc-gen-go: plugins are not supported; use 'protoc --go-grpc_out=...' to generate gRPC\n\nSee %s for more information.", grpcDocURL)
-			return errors.New(reason)
-		}
-
-		for _, f := range gen.Files {
-			if f.Generate {
-				gengo.GenerateFile(gen, f)
-			}
-		}
-		gen.SupportedFeatures = gengo.SupportedFeatures
-		gen.SupportedEditionsMinimum = gengo.SupportedEditionsMinimum
-		gen.SupportedEditionsMaximum = gengo.SupportedEditionsMaximum
-		return nil
-	})
+	err := run(os.Stdin, opts)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
