@@ -11,8 +11,7 @@ For more information about the usage of this plugin, see: https://protobuf.dev/r
 - customize message field name
 
 ## Limitations
-- only works for message declaration
-- do not support `oneof` field
+- only works for message field declaration
 
 ## Installation
 ```bash
