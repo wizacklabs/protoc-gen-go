@@ -12,7 +12,7 @@ For more information about the usage of this plugin, see: https://protobuf.dev/r
 
 ## Limitations
 - only works for message declaration
-- donot support `oneof` keyword
+- do not support `oneof` field
 
 ## Installation
 ```bash
