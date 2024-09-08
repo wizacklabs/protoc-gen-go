@@ -6,6 +6,10 @@ protoc-gen-go: $(SOURCES)
 	go build -ldflags '-s -w -X main.version=$(VERSION) -X main.rc=$(RC)' -o $@ .
 
 
+.PHONY: install
+install:
+	go install -ldflags '-s -w -X main.version=$(VERSION) -X main.rc=$(RC)' 
+
 .PHONY: clean
 clean:
 	@rm -f protoc-gen-go
