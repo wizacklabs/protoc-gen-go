@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	version = "v0.1.0-0-g00000000"
+	version = "v0.1.1-0-g831215c2"
 	rc      = "0"
 )
 
