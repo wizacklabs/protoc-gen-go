@@ -8,4 +8,6 @@ message foo {
     // @json.tag=ID
     // @go.name=ID
     int64 id = 1;
+    // @gorm.tag="column:id;type:text"
+    string name = 2;
 }
