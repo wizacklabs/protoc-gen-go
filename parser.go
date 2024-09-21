@@ -155,7 +155,9 @@ func (field *Field) parseComments(comments protogen.Comments) (replacement proto
 
 			fmt.Fprintf(os.Stderr, "skip %s go name replacement, illegal value '%s'", field.Name, name)
 		} else if matches := re.FindStringSubmatch(pattern); len(matches) == 3 {
-			tag := &Tag{Kind: matches[1], Value: strings.TrimSpace(matches[2])}
+			value := strings.TrimSpace(matches[2])
+			value = strings.TrimSuffix(strings.TrimPrefix(value, "\""), "\"")
+			tag := &Tag{Kind: matches[1], Value: value}
 			if index := strings.IndexByte(strings.TrimSpace(tag.Value), ' '); index == -1 {
 				field.Tags = append(field.Tags, tag)
 				continue
